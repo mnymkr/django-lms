@@ -115,8 +115,11 @@ class StaffAddForm(UserCreationForm):
         user.email = self.cleaned_data.get("email")
 
         if commit:
-            print(user)
+            print(user)  # Debug
             user.save()
+        else:  # Debug
+            print(user)  # Debug
+            print("not saved into database")  # Debug
 
         return user
 

@@ -36,6 +36,16 @@
     max-height: 12em;   /* Ensure it does not exceed the height for 8 lines */
     overflow-wrap: break-word;
     }
+    .limit-lines-title {
+    display: -webkit-box;
+    webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 6em;   /* 8 lines of text = 8 * line-height */
+    max-height: 6em;   /* Ensure it does not exceed the height for 8 lines */
+    overflow-wrap: break-word;
+    }
 </style>
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -84,7 +94,7 @@
         <div class="col-md-4 mb-4">
             <div class="bg-white border">
                 <div class="card-header-ne {% if item.posted_as == 'News' %}news{% else %}events{% endif %} p-2">
-                    <span class="p-0">
+                    <span class="p-0 limit-lines-title">
                         {{ item.title|title }}
                     </span>
                     {% if request.user.is_superuser %}
@@ -102,7 +112,7 @@
                     {% endif %}
                 </div>
                 <!--{{ item.summary }} -->
-                <div class="p-2 limit-lines">{{ item.summary|slice:":200" }}{% if item.summary|length > 200 %}...{% endif %}</div>
+                <div class="p-2 limit-lines">{{ item.summary|slice:":200" }}{% if item.summary|length > 200 %} (...){% endif %}</div>
 
                 <div class="date-wrapper">
                     <i class="fa fa-calendar mr-2"></i>

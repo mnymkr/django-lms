@@ -26,6 +26,16 @@
     .card-header-ne .title {
         vertical-align: middle;
     }
+    .limit-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 12em;   /* 8 lines of text = 8 * line-height */
+    max-height: 12em;   /* Ensure it does not exceed the height for 8 lines */
+    overflow-wrap: break-word;
+    }
 </style>
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -91,8 +101,8 @@
                     </div>
                     {% endif %}
                 </div>
-
-                <div class="p-2">{{ item.summary }}</div>
+                <!--{{ item.summary }} -->
+                <div class="p-2 limit-lines">{{ item.summary|slice:":200" }}{% if item.summary|length > 200 %}...{% endif %}</div>
 
                 <div class="date-wrapper">
                     <i class="fa fa-calendar mr-2"></i>

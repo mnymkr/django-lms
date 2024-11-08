@@ -20,6 +20,13 @@ def home_view(request):
     }
     return render(request, "core/index.html", context)
 
+def post_view(request, pk):
+    # item = get_object_or_404(NewsAndEvents, pk=pk)
+    item = NewsAndEvents.objects.get(pk=pk)
+    context = {
+        "item": item
+    }
+    return render(request, "core/post_view.html", context)
 
 @login_required
 @admin_required

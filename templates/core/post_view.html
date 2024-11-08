@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | Learning management system{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .color-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+    }
+
+    .bg-purple {
+        background-color: #6f42c1;
+    }
+
+    .card-header-ne {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .card-header-ne .title {
+        vertical-align: middle;
+    }
+    .limit-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 12em;   /* 8 lines of text = 8 * line-height */
+    max-height: 12em;   /* Ensure it does not exceed the height for 8 lines */
+    overflow-wrap: break-word;
+    }
+    .limit-lines-title {
+    display: -webkit-box;
+    webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 6em;   /* 8 lines of text = 8 * line-height */
+    max-height: 6em;   /* Ensure it does not exceed the height for 8 lines */
+    overflow-wrap: break-word;
+    }
+</style>
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
+
+{% if request.user.is_superuser %}
+<div class="manage-wrap">
+    <!-- TEMPLATE FOR SEE MORE BUTTON -->
+    <a class="btn btn-primary" href="{% url 'add_item' %}"><i class="fas fa-plus"></i> Add New Post</a>
+</div>
+{% endif %}
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == 'error' %}
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-circle"></i>{{ message }}
+</div>
+{% else %}
+<div class="alert alert-success">
+    <i class="fas fa-check-circle"></i>{{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<div>
+    <div class="title-1">News &amp; Events</div>
+</div>
+
+<div class="col-md-2 ms-auto d-flex">
+    {% if item.posted_as == 'News' %}
+    <div class="me-3">
+        <span class="color-indicator bg-primary"></span> News
+    </div>
+    {% else %}
+    <div>
+        <span class="color-indicator bg-purple"></span> Events
+    </div>
+    {% endif %}
+</div>
+
+<div class="container-fluid col-md-8 rounded">
+    <!-- POST TITLE -->
+    <div class="card-header-ne rounded {% if item.posted_as == 'News' %}news{% else %}events{% endif %} p-2">
+        <h2 class="p-0">
+            {{ item.title|title }}
+        </h2>
+        {% if request.user.is_superuser %}
+        <div class="dropstart">
+            <button class="btn btn-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v text-white"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'edit_post' pk=item.id %}"><i
+                        class="fas fa-pencil-alt"></i> Edit</a>
+                <a class="dropdown-item" href="{% url 'delete_post' pk=item.id %}"><i
+                        class="fas fa-trash-alt"></i> Delete</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>   
+    <div class="p-2 bg-white border">{{ item.summary | linebreaks }}</div>
+
+    <div class="date-wrapper">
+        <i class="fa fa-calendar mr-2"></i>
+        {{ item.updated_date|timesince }} ago
+    </div>
+</div>
+
+{% endblock content %}
